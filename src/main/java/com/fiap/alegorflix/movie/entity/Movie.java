@@ -1,5 +1,7 @@
 package com.fiap.alegorflix.movie.entity;
 
+import java.time.LocalDate;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -20,7 +22,9 @@ public class Movie {
     private String id;
     private String title;
     private String description;
-    private CategoryEnum category;
+    private String category;
+    private String url;
+    private LocalDate publishedDate;
 
     @Version
     private Long version;
@@ -28,7 +32,9 @@ public class Movie {
     public Movie(MovieDto dto) {
         this.title = dto.title();
         this.description = dto.description();
-        this.category = dto.category();
+        this.category = dto.category().getCategory();
+        this.url = dto.url();
+        this.publishedDate = LocalDate.now();
     }
 
 }

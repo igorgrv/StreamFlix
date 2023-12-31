@@ -1,5 +1,8 @@
 package com.fiap.alegorflix.user.entity;
 
+import java.time.LocalDate;
+
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -21,6 +24,7 @@ public class User {
     private String name;
     private String email;
     private String password;
+    private LocalDate createdDate;
 
     @Version
     private Long version;
@@ -29,6 +33,7 @@ public class User {
         this.name = dto.name();
         this.email = dto.email();
         this.password = dto.password();
+        this.createdDate = LocalDate.now();
     }
 
 }
