@@ -1,0 +1,6 @@
+spring:
+    profiles.active: local
+    application.name: AlegorFlix
+    banner.location: static/banner.txt
+    data.mongodb.uri: ${MONGO_URI}
+
