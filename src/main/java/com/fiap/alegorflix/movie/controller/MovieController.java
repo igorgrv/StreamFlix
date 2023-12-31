@@ -60,7 +60,7 @@ public class MovieController {
     @GetMapping
     public ResponseEntity<Mono<PageImpl<Movie>>> findAll(@RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "name") String sortBy) {
+            @RequestParam(defaultValue = "publishedDate") String sortBy) {
 
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(sortBy));
 
@@ -74,6 +74,16 @@ public class MovieController {
     @GetMapping("{id}")
     public ResponseEntity<Mono<Movie>> getById(@PathVariable("id") String movieId) {
         Mono<Movie> movie = service.findById(movieId);
+        return new ResponseEntity<>(movie, OK);
+    }
+
+    @Operation(summary = "Get a Movie by Title", description = "Method to get a Movie based on the Title")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "SUCCESS", content = @Content(schema = @Schema(implementation = Movie.class), mediaType = MediaType.APPLICATION_JSON_VALUE)),
+    })
+    @GetMapping("title/{movieTitle}")
+    public ResponseEntity<Mono<Movie>> getByTitle(@PathVariable("movieTitle") String movieTitle) {
+        Mono<Movie> movie = service.findByTitle(movieTitle);
         return new ResponseEntity<>(movie, OK);
     }
 

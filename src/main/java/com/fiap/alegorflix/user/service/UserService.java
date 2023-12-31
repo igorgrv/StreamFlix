@@ -12,10 +12,12 @@ import com.fiap.alegorflix.user.repository.UserRepository;
 import com.fiap.alegorflix.utils.DefaultService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserService implements DefaultService<User, UserDto> {
 
     private final UserRepository repository;
@@ -41,8 +43,7 @@ public class UserService implements DefaultService<User, UserDto> {
     }
 
     public Mono<Void> deleteById(String id) {
-        var user = findById(id);
-        return repository.delete(user.block());
+        return repository.deleteById(id).then();
     }
 
 }

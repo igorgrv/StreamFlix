@@ -41,8 +41,12 @@ public class MovieService implements DefaultService<Movie, MovieDto> {
     }
 
     public Mono<Void> deleteById(String id) {
-        var movie = findById(id);
-        return repository.delete(movie.block());
+        // var movie = findById(id);
+        return repository.deleteById(id);
+    }
+
+    public Mono<Movie> findByTitle(String movieTitle) {
+      return handleNotFound(repository.findByTitle(movieTitle), movieTitle);
     }
 
 }

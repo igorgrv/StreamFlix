@@ -24,7 +24,7 @@ To get started you need to:
 * With the server up and running, execute the following commands:
 
 ```bash
-use parking-meter
+use alegorflix
 ```
 
 

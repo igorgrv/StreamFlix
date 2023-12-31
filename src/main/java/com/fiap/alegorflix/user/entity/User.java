@@ -2,7 +2,6 @@ package com.fiap.alegorflix.user.entity;
 
 import java.time.LocalDate;
 
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fiap.alegorflix.movie.controller.dto.MovieDto;
@@ -20,6 +21,8 @@ public class Movie {
 
     @Id
     private String id;
+
+    @Indexed(unique = true)
     private String title;
     private String description;
     private String category;
