@@ -8,10 +8,9 @@ import io.swagger.v3.oas.annotations.info.License;
 import io.swagger.v3.oas.annotations.servers.Server;
 
 @Configuration
-@OpenAPIDefinition(info = @Info(title = "AlegorFlix Monitor", version = "0.0.1", description = "Solution for monitoring AlegorFlix", license = @License(name = "MIT License", url = "https://github.com/igorgrv/alegorflix-graduate")), servers = {
+@OpenAPIDefinition(info = @Info(title = "AleGorFlix Monitor", version = "0.0.1", description = "The best place to watch movies", license = @License(name = "MIT License", url = "https://github.com/igorgrv/alegorflix-graduate")), servers = {
     @Server(url = "http://localhost:8080"),
-    @Server(url = "https://alegorflix-e2kw5mlx.b4a.run"),
-        @Server(url = "https://localhost:8080")
+    @Server(url = "https://alegorflix-e2kw5mlx.b4a.run")
 })
 public class SpringDocConfigurations {
 }

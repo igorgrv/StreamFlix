@@ -17,4 +17,13 @@ public enum CategoryEnum {
     public String getCategory() {
         return category;
     }
+
+    public static CategoryEnum fromString(String category) {
+        for (CategoryEnum enumValue : CategoryEnum.values()) {
+            if (enumValue.category.equalsIgnoreCase(category)) {
+                return enumValue;
+            }
+        }
+        throw new IllegalArgumentException("No category found given: " + category);
+    }
 }

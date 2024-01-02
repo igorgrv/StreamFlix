@@ -12,12 +12,10 @@ import com.fiap.alegorflix.user.repository.UserRepository;
 import com.fiap.alegorflix.utils.DefaultService;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class UserService implements DefaultService<User, UserDto> {
 
     private final UserRepository repository;
@@ -29,7 +27,7 @@ public class UserService implements DefaultService<User, UserDto> {
     }
 
     public Mono<User> findById(String userId) {
-        return handleNotFound(repository.findById(userId), userId);
+        return handleNotFound(repository.findById(userId), User.class, userId);
     }
 
     public Mono<User> create(UserDto user) {

@@ -1,5 +1,6 @@
 package com.fiap.alegorflix.exception;
 
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +15,15 @@ import org.springframework.web.reactive.resource.NoResourceFoundException;
 public class CustomExceptionHandler {
 
     @ExceptionHandler(NoResourceFoundException.class)
-    public ResponseEntity<Object> handleException(NoResourceFoundException ex) {
+    public ResponseEntity<Object> handleExceptionNoResourceFoundException(NoResourceFoundException ex) {
         Error error = new Error(HttpStatus.NOT_FOUND.value(), ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(IncorrectResultSizeDataAccessException.class)
+    public ResponseEntity<Object> handleExceptionIncorrectResultSizeDataAccessException(IncorrectResultSizeDataAccessException ex) {
+        Error error = new Error(HttpStatus.NOT_FOUND.value(), ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
     @ExceptionHandler(OptimisticLockingFailureException.class)

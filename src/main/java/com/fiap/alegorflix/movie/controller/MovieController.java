@@ -3,6 +3,10 @@ package com.fiap.alegorflix.movie.controller;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -19,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fiap.alegorflix.movie.controller.dto.MovieDto;
+import com.fiap.alegorflix.movie.entity.CategoryEnum;
 import com.fiap.alegorflix.movie.entity.Movie;
 import com.fiap.alegorflix.movie.service.MovieService;
 
@@ -77,14 +82,27 @@ public class MovieController {
         return new ResponseEntity<>(movie, OK);
     }
 
-    @Operation(summary = "Get a Movie by Title", description = "Method to get a Movie based on the Title")
+    @Operation(summary = "Get a Movie by Title / Published Date", description = "Method to get a Movie based on the Title or Published Date")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "SUCCESS", content = @Content(schema = @Schema(implementation = Movie.class), mediaType = MediaType.APPLICATION_JSON_VALUE)),
     })
-    @GetMapping("title/{movieTitle}")
-    public ResponseEntity<Mono<Movie>> getByTitle(@PathVariable("movieTitle") String movieTitle) {
-        Mono<Movie> movie = service.findByTitle(movieTitle);
-        return new ResponseEntity<>(movie, OK);
+    @GetMapping("/search")
+    public ResponseEntity<Mono<PageImpl<Movie>>> getByTitleOrPublishedDate(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "publishedDate") String sortBy,
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) LocalDate publishedDate,
+            @RequestParam(required = false) CategoryEnum category) {
+
+        Map<String, Object> filters = new HashMap<>();
+        filters.put("title", title);
+        filters.put("publishedDate", publishedDate);
+        filters.put("category", category);
+
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(sortBy));
+
+        return ResponseEntity.status(OK).body(service.findByFilters(filters, pageRequest));
     }
 
     @Operation(summary = "Create a Movie", description = "Method to crete a new Movie")
@@ -109,10 +127,8 @@ public class MovieController {
 
     @Operation(summary = "Delete a Movie", description = "Method to Delete an existing Movie")
     @DeleteMapping("{id}")
-    public ResponseEntity<String> delete(@PathVariable("id") String id) {
-        service.deleteById(id);
-        String message = "Movie " + id + " deleted with success";
-        return new ResponseEntity<>(message, OK);
+    public Mono<String> delete(@PathVariable("id") String id) {
+        return service.deleteById(id).then(Mono.just("Movie " + id + " deleted with success"));
     }
 
 }
