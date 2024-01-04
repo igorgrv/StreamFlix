@@ -1,8 +1,8 @@
 # AleGor Flix :movie_camera:
 **Tech Challenge - Phase 4 - Graduate/Pós-Graduação**
 
-GitHub Repository: https://github.com/igorgrv/StreamFlix
-Swagger: http://localhost:8080/webjars/swagger-ui/index.html
+* GitHub Repository: https://github.com/igorgrv/StreamFlix
+* Swagger: http://localhost:8080/webjars/swagger-ui/index.html
 
 ## About :book:
 
@@ -69,17 +69,6 @@ use alegorflix
 |      **`db.nomeCollection.find()`**      | Shows all the documents of the specified collection |
 
 
-
-## Entity-relationship
-
-
-
-
-
-
-## Back4App Containers
-To test remotely We perform the deployment on back4app.
-Swagger: https://alegorflix-e2kw5mlx.b4a.run/swagger-ui/index.html
 
 
 ## Challenges
