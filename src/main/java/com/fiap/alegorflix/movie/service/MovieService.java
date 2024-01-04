@@ -6,6 +6,7 @@ import static com.fiap.alegorflix.utils.HandleNotFound.handleNotFoundFlux;
 import java.time.LocalDate;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -97,6 +98,14 @@ public class MovieService implements DefaultService<Movie, MovieDto> {
 
     public Mono<Void> deleteById(String id) {
         return repository.deleteById(id).then();
+    }
+
+    public Flux<Movie> findByCategories(Set<String> movieCategories) {
+      return repository.findByCategories(movieCategories);
+    }
+
+    public Mono<Long> getNumberOfMovies() {
+      return repository.count();
     }
 
 }

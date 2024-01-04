@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fiap.alegorflix.movie.entity.Movie;
 import com.fiap.alegorflix.user.controller.dto.UserDto;
 import com.fiap.alegorflix.user.entity.User;
 import com.fiap.alegorflix.user.service.UserService;
@@ -32,6 +33,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -83,8 +85,8 @@ public class UserController {
     })
     @PostMapping
     public ResponseEntity<Mono<User>> create(@Valid @RequestBody UserDto user) {
-        Mono<User> savedItem = service.create(user);
-        return new ResponseEntity<>(savedItem, CREATED);
+        Mono<User> savedUser = service.create(user);
+        return new ResponseEntity<>(savedUser, CREATED);
     }
 
     @Operation(summary = "Update a User", description = "Method to update an existing User")
@@ -99,10 +101,28 @@ public class UserController {
 
     @Operation(summary = "Delete a User", description = "Method to Delete an existing User")
     @DeleteMapping("{id}")
-    public ResponseEntity<String> delete(@PathVariable("id") String id) {
-        service.deleteById(id);
-        String message = "User " + id + " deleted with success";
-        return new ResponseEntity<>(message, OK);
+    public Mono<String> delete(@PathVariable("id") String id) {
+        return service.deleteById(id).then(Mono.just("User " + id + " deleted with success"));
+    }
+
+    @Operation(summary = "Add movie as favorite", description = "Method to add a movie as favorite")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "SUCCESS - Movie added as favorite", content = @Content(schema = @Schema(implementation = User.class), mediaType = MediaType.APPLICATION_JSON_VALUE)),
+    })
+    @PostMapping("{id}")
+    public ResponseEntity<Mono<User>> addFavorite(@PathVariable String id, String movieId) {
+        Mono<User> savedItem = service.addFavoriteMovie(id, movieId);
+        return new ResponseEntity<>(savedItem, OK);
+    }
+
+    @Operation(summary = "Get recommended movies given User", description = "Method to get the list of movies based on the category of movies that the user has added as a favorite")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "SUCCESS", content = @Content(schema = @Schema(implementation = Movie.class), mediaType = MediaType.APPLICATION_JSON_VALUE)),
+    })
+    @GetMapping("recommended/{userId}")
+    public ResponseEntity<Flux<Movie>> getRecommendedMoviesGiven(@PathVariable String userId) {
+        Flux<Movie> movie = service.findRecommendedMoviesGiven(userId);
+        return new ResponseEntity<>(movie, OK);
     }
 
 }

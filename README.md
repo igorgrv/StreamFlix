@@ -24,10 +24,10 @@ Welcome to **AleGor Flix**! An innovative project that combines the powerful tec
 | Os vídeos devem conter os seguintes campos: título, descrição, URL e data de publicação. | X    |
 | A listagem de vídeos deve ser paginada e ordenável por data de publicação. | X    |
 | Implementar filtros de busca por título e data de publicação na listagem. | X    |
-| Implementar sistema de marcação de vídeos como favoritos.    |      |
+| Implementar sistema de marcação de vídeos como favoritos.    | X    |
 | Implementar categorias para os vídeos e permitir a filtragem por categoria na listagem. | X    |
-| Implementar um sistema de recomendação de vídeos com base nos favoritos do usuário. |      |
-| Implementar um endpoint para estatísticas, mostrando a quantidade total de vídeos, a quantidade de vídeos favoritados e a média de visualizações |      |
+| Implementar um sistema de recomendação de vídeos com base nos favoritos do usuário. | X    |
+| Implementar um endpoint para estatísticas, mostrando a quantidade total de vídeos, a quantidade de vídeos favoritados e a média de visualizações | X    |
 | Utilização do Spring WebFlux para a criação de endpoints reativos. | X    |
 | Utilização do Spring Boot para configuração e inicialização da aplicação. | X    |
 | Utilização do Spring Data para a camada de persistência com suporte a bancos de dados reativos (por exemplo, MongoDB). | X    |

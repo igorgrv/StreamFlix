@@ -6,6 +6,7 @@ import static org.springframework.http.HttpStatus.OK;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -37,6 +38,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -103,6 +105,16 @@ public class MovieController {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(sortBy));
 
         return ResponseEntity.status(OK).body(service.findByFilters(filters, pageRequest));
+    }
+
+    @Operation(summary = "Get a Movie by list of Categories", description = "Method to get a Movies given list of Categories")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "SUCCESS", content = @Content(schema = @Schema(implementation = Movie.class), mediaType = MediaType.APPLICATION_JSON_VALUE)),
+    })
+    @PostMapping("categories")
+    public ResponseEntity<Flux<Movie>> getByCategories(@RequestBody Set<String> movies) {
+        Flux<Movie> movie = service.findByCategories(movies);
+        return new ResponseEntity<>(movie, OK);
     }
 
     @Operation(summary = "Create a Movie", description = "Method to crete a new Movie")
