@@ -101,11 +101,29 @@ public class MovieService implements DefaultService<Movie, MovieDto> {
     }
 
     public Flux<Movie> findByCategories(Set<String> movieCategories) {
-      return repository.findByCategories(movieCategories);
+        return repository.findByCategories(movieCategories);
     }
 
     public Mono<Long> getNumberOfMovies() {
-      return repository.count();
+        return repository.count();
+    }
+
+    public Mono<Movie> watchMovie(String id) {
+        return findById(id).flatMap(movie -> {
+            Integer views = movie.getViews();
+            if (views == null)
+                movie.setViews(0);
+            views++;
+            movie.setViews(views);
+            return repository.save(movie);
+        });
+    }
+
+    public Mono<Long> countViewsOfAllMovies() {
+        return repository.findAll()
+                .map(Movie::getViews)
+                .reduce(0, Integer::sum)
+                .map(Long::valueOf);
     }
 
 }

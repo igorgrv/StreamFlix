@@ -28,6 +28,7 @@ public class Movie {
     private String category;
     private String url;
     private LocalDate publishedDate;
+    private Integer views = 0;
 
     @Version
     private Long version;

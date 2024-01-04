@@ -27,6 +27,7 @@ import com.fiap.alegorflix.movie.controller.dto.MovieDto;
 import com.fiap.alegorflix.movie.entity.CategoryEnum;
 import com.fiap.alegorflix.movie.entity.Movie;
 import com.fiap.alegorflix.movie.service.MovieService;
+import com.fiap.alegorflix.user.entity.User;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -141,6 +142,17 @@ public class MovieController {
     @DeleteMapping("{id}")
     public Mono<String> delete(@PathVariable("id") String id) {
         return service.deleteById(id).then(Mono.just("Movie " + id + " deleted with success"));
+    }
+
+    @Operation(summary = "Watch a movie", description = "Method to watch a movie")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "SUCCESS - Movie watched!", content = @Content(schema = @Schema(implementation = User.class), mediaType = MediaType.APPLICATION_JSON_VALUE)),
+    })
+    @PostMapping("watch/{id}")
+    public ResponseEntity<Mono<Movie>> watchMovie(@PathVariable String id) {
+        Mono<Movie> movieWatched = service.watchMovie(id);
+
+        return new ResponseEntity<>(movieWatched, OK);
     }
 
 }

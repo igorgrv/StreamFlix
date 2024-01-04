@@ -119,7 +119,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "SUCCESS", content = @Content(schema = @Schema(implementation = Movie.class), mediaType = MediaType.APPLICATION_JSON_VALUE)),
     })
-    @GetMapping("recommended/{userId}")
+    @GetMapping("{userId}/recommended")
     public ResponseEntity<Flux<Movie>> getRecommendedMoviesGiven(@PathVariable String userId) {
         Flux<Movie> movie = service.findRecommendedMoviesGiven(userId);
         return new ResponseEntity<>(movie, OK);
