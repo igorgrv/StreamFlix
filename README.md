@@ -32,13 +32,13 @@ Welcome to **AleGor Flix**! An innovative project that combines the powerful tec
 | Utilização do Spring Boot para configuração e inicialização da aplicação. | X    |
 | Utilização do Spring Data para a camada de persistência com suporte a bancos de dados reativos (por exemplo, MongoDB). | X    |
 | Implementar a arquitetura Clean Architecture, separando a aplicação em camadas: Controllers, Services, Use Cases, Repositories. | X    |
-| Implementar testes unitários e de integração para as diferentes camadas da aplicação, com cobertura de testes de pelo menos 80% do código. |      |
+| **Implementar testes unitários e de integração para as diferentes camadas da aplicação, com cobertura de testes de pelo menos 80% do código.** |      |
 | Utilizar boas práticas de nomenclatura, organização de código e comentários quando necessário. | X    |
 | Utilizar validações de entrada nos endpoints.                | X    |
 | Gerenciar dependências utilizando o gerenciador de pacotes Maven ou | X    |
 | Código-fonte do projeto no repositório Git (GitHub, GitLab, Bitbucket, etc.). | X    |
-| Uma apresentação gravada demonstrando o funcionamento da plataforma, mostrando o código e explicando a arquitetura do projeto. |      |
-| Documentação descrevendo a arquitetura escolhida, decisões técnicas relevantes e um guia de uso da |      |
+| **Uma apresentação gravada demonstrando o funcionamento da plataforma, mostrando o código e explicando a arquitetura do projeto.** |      |
+| **Documentação descrevendo a arquitetura escolhida, decisões técnicas relevantes e um guia de uso da** |      |
 
 
 
