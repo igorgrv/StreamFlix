@@ -2,6 +2,7 @@ package com.fiap.alegorflix.movie.entity;
 
 import java.time.LocalDate;
 
+import lombok.Builder;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -17,6 +18,7 @@ import lombok.NoArgsConstructor;
 @Document
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder(toBuilder = true)
 public class Movie {
 
     @Id
