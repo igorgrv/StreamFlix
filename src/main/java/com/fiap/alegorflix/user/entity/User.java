@@ -1,11 +1,14 @@
 package com.fiap.alegorflix.user.entity;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fiap.alegorflix.movie.entity.Movie;
 import com.fiap.alegorflix.user.controller.dto.UserDto;
 
 import lombok.AllArgsConstructor;
@@ -24,6 +27,7 @@ public class User {
     private String email;
     private String password;
     private LocalDate createdDate;
+    private Set<Movie> favoriteMovies;
 
     @Version
     private Long version;

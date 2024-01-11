@@ -1,8 +1,10 @@
 package com.fiap.alegorflix.movie.repository;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 
 import com.fiap.alegorflix.movie.entity.Movie;
@@ -20,4 +22,7 @@ public interface MovieRepository extends ReactiveMongoRepository<Movie, String> 
     Flux<Movie> findByTitleAndPublishedDate(String title, LocalDate publishedDate);
 
     Mono<Boolean> existsByTitle(String title);
+
+    @Query("{'category': { $in: ?0 }}")
+    Flux<Movie> findByCategories(Set<String> categories);
 }
