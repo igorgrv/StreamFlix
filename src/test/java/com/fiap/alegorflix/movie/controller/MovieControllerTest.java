@@ -1,9 +1,12 @@
 package com.fiap.alegorflix.movie.controller;
 
-import com.fiap.alegorflix.exception.CustomExceptionHandler;
-import com.fiap.alegorflix.movie.entity.Movie;
-import com.fiap.alegorflix.movie.service.MovieService;
-import com.fiap.alegorflix.utils.MovieHelper;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import java.util.Collections;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -14,20 +17,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import com.fiap.alegorflix.exception.CustomExceptionHandler;
+import com.fiap.alegorflix.movie.entity.Movie;
+import com.fiap.alegorflix.movie.service.MovieService;
+import com.fiap.alegorflix.utils.MovieHelper;
+
 import reactor.core.publisher.Mono;
-
-import java.util.Collections;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class MovieControllerTest {
 
@@ -129,7 +128,7 @@ public class MovieControllerTest {
 
             mockMvc.perform(asyncDispatch(mvcResult))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(movie.getId()))
                 .andExpect(jsonPath("$.title").value(movie.getTitle()))
                 .andExpect(jsonPath("$.description").value(movie.getDescription()))
