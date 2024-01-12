@@ -128,7 +128,7 @@ public class MovieControllerTest {
 
             mockMvc.perform(asyncDispatch(mvcResult))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(jsonPath("$.id").value(movie.getId()))
                 .andExpect(jsonPath("$.title").value(movie.getTitle()))
                 .andExpect(jsonPath("$.description").value(movie.getDescription()))
