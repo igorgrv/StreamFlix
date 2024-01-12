@@ -2,11 +2,13 @@
 # mvn clean install -DskipTests=true && docker-compose build --no-cache && docker-compose up
 version: '3'
 services:
-#   mongo-alegorflix:
-#     image: mongo
-#     container_name: mongo-alegorflix
-#     ports:
-#       - "27017:27017"
+  mongo-alegorflix:
+    image: mongo
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    networks:
+      - my_network
   
   alegorflix:
     build:
@@ -15,3 +17,9 @@ services:
     container_name: alegorflix
     ports:
       - "8080:8080"
+    networks:
+      - my_network
+
+networks:
+  my_network:
+    driver: bridge
