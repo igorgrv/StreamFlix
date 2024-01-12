@@ -12,7 +12,8 @@ public abstract class MovieHelper {
             .description("Slasher")
             .category("Horror")
             .url("scream.com.br")
-            .publishedDate(LocalDate.of(1993,01,01))
+            .publishedDate(LocalDate.now())
+            .views(1000)
             .version(1L)
             .build();
     }
