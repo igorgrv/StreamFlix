@@ -1,10 +1,9 @@
 spring:
-    profiles.active: local
-    application.name: AlegorFlix
+    application:
+        name: AlegorFlix
     banner.location: static/banner.txt
     data.mongodb:
-      uri: ${MONGOURI:mongodb://localhost/alegorflix}
-      port: 27017
-      username:
-      password:
-
+        # to run WITHOUT docker (local)
+        uri: mongodb://localhost:27017/alegorflix
+        # to run with Docker
+        # uri: mongodb://mongodb:27017/alegorflix
