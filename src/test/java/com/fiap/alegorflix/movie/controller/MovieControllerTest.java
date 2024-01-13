@@ -1,13 +1,11 @@
 package com.fiap.alegorflix.movie.controller;
 
 import com.fiap.alegorflix.exception.CustomExceptionHandler;
+import com.fiap.alegorflix.exception.NotFoundException;
 import com.fiap.alegorflix.movie.entity.Movie;
 import com.fiap.alegorflix.movie.service.MovieService;
 import com.fiap.alegorflix.utils.MovieHelper;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.Page;
@@ -68,14 +66,12 @@ public class MovieControllerTest {
             Mono mono = Mono.just(page);
             when(service.findAll(any(Pageable.class)))
                 .thenReturn(mono);
+
             mockMvc.perform(get("/movies")
-                    .contentType(MediaType.APPLICATION_JSON))
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(request().asyncResult(page))
                 .andExpect(status().isOk());
-//                .andExpect(jsonPath("$.content[0].title").value(movie.getTitle()))
-//                .andExpect(jsonPath("$.content[0].description").value(movie.getDescription()))
-//                .andExpect(jsonPath("$.content[0].category").value(movie.getCategory()))
-//                .andExpect(jsonPath("$.content[0].url").value(movie.getUrl()))
-//                .andExpect(jsonPath("$.content[0].publishedDate").value(movie.getDescription()));
+
             verify(service, times(1))
                 .findAll(any(Pageable.class));
         }
@@ -86,12 +82,12 @@ public class MovieControllerTest {
             Mono mono = Mono.just(page);
             when(service.findAll(any(Pageable.class)))
                 .thenReturn(mono);
+
             mockMvc.perform(get("/movies")
-                    .contentType(MediaType.APPLICATION_JSON))
+                    .accept(MediaType.APPLICATION_JSON))
+                .andExpect(request().asyncResult(new PageImpl<>(Collections.emptyList())))
                 .andExpect(status().isOk());
-//                .andExpect(jsonPath("$.content").isArray())
-//                .andExpect(jsonPath("$.content", empty()))
-//                .andExpect(jsonPath("$.content", hasSize(0)));
+
             verify(service, times(1))
                 .findAll(any(Pageable.class));
         }
@@ -119,6 +115,7 @@ public class MovieControllerTest {
         @Test
         void shouldAllowFindMovie() throws Exception {
             var movie = MovieHelper.createMovie();
+
             Mono mono = Mono.just(movie);
             when(service.findById(any(String.class)))
                 .thenReturn(mono);
@@ -141,5 +138,25 @@ public class MovieControllerTest {
             verify(service, times(1))
                 .findById(any(String.class));
         }
+
+        @Test
+        void shouldGenerateExceptionWhenIDNotFound() throws Exception {
+            var movie = MovieHelper.createMovie();
+
+            when(service.findById(any(String.class)))
+                .thenReturn(Mono.error(new NotFoundException("Id not found")));
+
+            MvcResult mvcResult = mockMvc.perform(get("/movies/{id}", movie.getId()))
+                .andExpect(request().asyncStarted())
+                .andReturn();
+
+            mockMvc.perform(asyncDispatch(mvcResult))
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE));
+
+            verify(service, times(1))
+                .findById(any(String.class));
+        }
+
     }
 }
