@@ -6,6 +6,7 @@ public enum CategoryEnum {
     ACTION("Action"),
     DRAMA("Drama"),
     ROMANCE("Romance"),
+    HORROR("Horror"),
     OTHER("Other");
 
     private String category;
