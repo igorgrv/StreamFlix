@@ -3,6 +3,7 @@ package com.fiap.alegorflix.user.entity;
 import java.time.LocalDate;
 import java.util.Set;
 
+import lombok.Builder;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -18,6 +19,7 @@ import lombok.NoArgsConstructor;
 @Document
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder(toBuilder = true)
 public class User {
 
     @Id
