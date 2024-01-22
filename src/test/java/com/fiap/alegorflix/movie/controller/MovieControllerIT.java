@@ -15,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasKey;
 
 @AutoConfigureDataMongo
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -32,10 +34,10 @@ public class MovieControllerIT {
     }
 
     @Nested
-    class RegistrarMensagem {
+    class CreateMovie {
 
         @Test
-        void devePermitirRegistrarMensagem() {
+        void shouldCreateAMovie() {
             mongoTemplate.dropCollection("movie");
             var movieRequest = MovieHelper.createMovieDTO();
 
@@ -46,16 +48,12 @@ public class MovieControllerIT {
                 .when()
                 .post("/movies")
                 .then()
-                .statusCode(HttpStatus.CREATED.value());
-//                .body("$", hasKey("id"))
-//                .body("$", hasKey("usuario"))
-//                .body("$", hasKey("conteudo"))
-//                .body("$", hasKey("dataCriacao"))
-//                .body("$", hasKey("gostei"))
-//                .body("usuario", equalTo(mensagemRequest.getUsuario()))
-//                .body("conteudo", equalTo(mensagemRequest.getConteudo()));
+                .statusCode(HttpStatus.CREATED.value())
+                .body("$", hasKey("title"))
+                .body("$", hasKey("description"))
+                .body("title", equalTo(movieRequest.title()))
+                .body("description", equalTo(movieRequest.description()));
 
-            System.out.print("Teste");
         }
     }
 }
