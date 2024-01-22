@@ -3,36 +3,26 @@ package com.fiap.alegorflix.movie.service;
 
 import com.fiap.alegorflix.exception.AlreadyExistsException;
 import com.fiap.alegorflix.exception.NotFoundException;
-import com.fiap.alegorflix.metrics.service.MetricService;
-
-import static com.fiap.alegorflix.utils.HandleNotFound.handleNotFoundFlux;
-
-import com.fiap.alegorflix.movie.controller.dto.MovieDto;
 import com.fiap.alegorflix.movie.entity.Movie;
 import com.fiap.alegorflix.movie.repository.MovieRepository;
-import com.fiap.alegorflix.user.service.UserService;
-import com.fiap.alegorflix.utils.HandleNotFound;
 import com.fiap.alegorflix.utils.MovieHelper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
-import reactor.core.CoreSubscriber;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -42,7 +32,6 @@ class MovieServiceTest {
 
     private MovieService movieService;
 
-    private HandleNotFound handleNotFound;
 
     @Mock
     private MovieRepository repository;
@@ -177,7 +166,57 @@ class MovieServiceTest {
             assertThat(movie.block().getContent().get(0).getTitle())
                 .isEqualTo(MovieHelper.createMovie().getTitle());
         }
+
+        @Test
+        void shouldFindByCategories() {
+            Set<String> categories = Set.of("Horror");
+
+            Flux<Movie> flux = Flux.just(MovieHelper.createMovie());
+
+            when(repository.findByCategories(anySet()))
+                .thenReturn(flux);
+
+            var movie = movieService.findByCategories(categories);
+
+            verify(repository, times(1))
+                .findByCategories(categories);
+            assertThat(movie.blockFirst().getCategory())
+                .isEqualTo(categories.iterator().next());
+        }
+
+        @Test
+        void shouldGetNumberOfMovies() {
+            Mono<Long> mono = Mono.just(1L);
+
+            when(repository.count())
+                .thenReturn(mono);
+
+            var movie = movieService.getNumberOfMovies();
+
+            verify(repository, times(1))
+                .count();
+            assertThat(movie.block().longValue())
+                .isEqualTo(mono.block().longValue());
+        }
+
+        @Test
+        void shouldCountViewsOfAllMovies() {
+            Mono<Long> mono = Mono.just(1000L);
+            Flux<Movie> flux = Flux.just(MovieHelper.createMovie());
+
+            when(repository.findAll())
+                .thenReturn(flux);
+
+            var movie = movieService.countViewsOfAllMovies();
+
+            verify(repository, times(1))
+                .findAll();
+            assertThat(movie.block().longValue())
+                .isEqualTo(mono.block().longValue());
+        }
+
     }
+
     @Nested
     class createMovie {
 
@@ -198,6 +237,7 @@ class MovieServiceTest {
                 .isEqualTo(movie.title());
             verify(repository, times(1)).save(any(Movie.class));
         }
+
         @Test
         void shouldCreateMovieAlreadyExistsException() {
 
@@ -215,6 +255,29 @@ class MovieServiceTest {
                 .hasMessage("Movie with title '" + movie.title() + "' already exists");
 
         }
+
+
+        @Test
+        void shouldWatchMovie() {
+
+            var movie = MovieHelper.createMovie();
+            movie.setViews(1001);
+
+            when(repository.findById(anyString()))
+                .thenReturn(Mono.just(MovieHelper.createMovie()));
+
+            when(repository.save(any(Movie.class)))
+                .thenReturn(Mono.just(movie));
+
+            var movieWatched = movieService.watchMovie(movie.getId());
+
+            assertThat(movieWatched)
+                .isNotNull();
+            assertThat(movieWatched.block().getViews())
+                .isEqualTo(1001);
+            verify(repository, times(1)).save(any(Movie.class));
+            verify(repository, times(1)).findById(anyString());
+        }
     }
 
     @Nested
@@ -230,7 +293,7 @@ class MovieServiceTest {
             when(repository.save(any(Movie.class)))
                 .thenReturn(Mono.just(movie));
 
-            var movieUpdated = movieService.update(movie.getId(),movieDTO);
+            var movieUpdated = movieService.update(movie.getId(), movieDTO);
 
             assertThat(movieUpdated)
                 .isNotNull();
@@ -239,6 +302,7 @@ class MovieServiceTest {
             verify(repository, times(1)).save(any(Movie.class));
         }
     }
+
     @Nested
     class deleteMovie {
 
