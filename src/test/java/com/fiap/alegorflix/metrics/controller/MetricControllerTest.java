@@ -1,8 +1,10 @@
 package com.fiap.alegorflix.metrics.controller;
 
-import com.fiap.alegorflix.exception.CustomExceptionHandler;
-import com.fiap.alegorflix.metrics.service.MetricService;
-import com.fiap.alegorflix.utils.MetricHelper;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -11,13 +13,11 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import reactor.core.publisher.Mono;
 
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.fiap.alegorflix.metrics.service.MetricService;
+import com.fiap.alegorflix.utils.MetricHelper;
+
+import reactor.core.publisher.Mono;
 
 public class MetricControllerTest {
 
@@ -30,15 +30,7 @@ public class MetricControllerTest {
 
     @BeforeEach
     void setUp() {
-        openMocks = MockitoAnnotations.openMocks(this);
-        MetricController metricController = new MetricController(service);
-        mockMvc = MockMvcBuilders.standaloneSetup(metricController)
-            .setControllerAdvice(new CustomExceptionHandler())
-            .addFilter((request, response, chain) -> {
-                response.setCharacterEncoding("UTF-8");
-                chain.doFilter(request, response);
-            }, "/*")
-            .build();
+        MockitoAnnotations.openMocks(this);
     }
 
     @AfterEach

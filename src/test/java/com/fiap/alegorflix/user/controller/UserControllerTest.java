@@ -1,17 +1,13 @@
 package com.fiap.alegorflix.user.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fiap.alegorflix.exception.CustomExceptionHandler;
-import com.fiap.alegorflix.exception.NotFoundException;
-import com.fiap.alegorflix.movie.controller.MovieController;
-import com.fiap.alegorflix.movie.controller.dto.MovieDto;
-import com.fiap.alegorflix.movie.entity.Movie;
-import com.fiap.alegorflix.movie.service.MovieService;
-import com.fiap.alegorflix.user.controller.dto.UserDto;
-import com.fiap.alegorflix.user.entity.User;
-import com.fiap.alegorflix.user.service.UserService;
-import com.fiap.alegorflix.utils.MovieHelper;
-import com.fiap.alegorflix.utils.UserHelper;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
+
+import java.util.Collections;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -20,25 +16,22 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fiap.alegorflix.exception.NotFoundException;
+import com.fiap.alegorflix.movie.entity.Movie;
+import com.fiap.alegorflix.user.controller.dto.UserDto;
+import com.fiap.alegorflix.user.entity.User;
+import com.fiap.alegorflix.user.service.UserService;
+import com.fiap.alegorflix.utils.MovieHelper;
+import com.fiap.alegorflix.utils.UserHelper;
+
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.time.LocalDate;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Set;
-
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class UserControllerTest {
 
@@ -51,15 +44,7 @@ public class UserControllerTest {
 
     @BeforeEach
     void setUp() {
-        openMocks = MockitoAnnotations.openMocks(this);
-        UserController userController = new UserController(service);
-        mockMvc = MockMvcBuilders.standaloneSetup(userController)
-            .setControllerAdvice(new CustomExceptionHandler())
-            .addFilter((request, response, chain) -> {
-                response.setCharacterEncoding("UTF-8");
-                chain.doFilter(request, response);
-            }, "/*")
-            .build();
+        MockitoAnnotations.openMocks(this);
     }
 
     @AfterEach
