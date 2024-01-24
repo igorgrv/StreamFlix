@@ -3,7 +3,4 @@ spring:
         name: AlegorFlix
     banner.location: static/banner.txt
     data.mongodb:
-        # to run WITHOUT docker (local)
         uri: mongodb://localhost:27017/alegorflix
-        # to run with Docker
-        # uri: mongodb://mongodb:27017/alegorflix
