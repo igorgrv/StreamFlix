@@ -23,4 +23,8 @@ public abstract class UserHelper {
     public static UserDto createUserDto(){
         return new UserDto("Igor", "igor@gmail.com", "igor123");
     }
+
+    public static UserDto UserToUserDto(User user){
+        return new UserDto(user.getName(), user.getEmail(), user.getPassword());
+    }
 }

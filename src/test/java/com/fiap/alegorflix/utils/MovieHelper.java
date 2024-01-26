@@ -20,8 +20,12 @@ public abstract class MovieHelper {
             .build();
     }
     public static MovieDto createMovieDTO(){
-        MovieDto movieDto = new MovieDto("Scream", "Slasher Film", "scream.com.br", CategoryEnum.HORROR);
-        return movieDto;
+        return new MovieDto("Scream", "Slasher Film", "scream.com.br", CategoryEnum.HORROR);
     }
+
+    public static MovieDto MovieTOMovieDTO(Movie movie){
+        return new MovieDto(movie.getTitle(), movie.getDescription(), movie.getUrl(), CategoryEnum.fromString(movie.getCategory()));
+    }
+
 
 }
